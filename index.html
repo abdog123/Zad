@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>زاد بريك | طعم يناديك</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* إضافة ستايل بسيط للجدول داخل المودال */
+        .price-table { width: 100%; margin: 15px 0; border-collapse: collapse; background: #fdfdfd; border-radius: 10px; overflow: hidden; }
+        .price-table td { padding: 10px; border: 1px solid #eee; font-weight: bold; }
+        .price-table .size-label { color: #e31e24; background: #fff5f5; width: 40%; }
+    :root {
+    --red: #e31e24;
+    --yellow: #ffcc00;
+    --dark: #1a1a1a;
+    --white: #ffffff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Cairo', sans-serif; background: #f4f4f4; direction: rtl; }
+.container { max-width: 1000px; margin: auto; padding: 20px; }
+
+/* Header */
+header { background: var(--dark); color: white; text-align: center; padding: 30px; border-bottom: 5px solid var(--red); }
+.logo { width: 100px; border-radius: 50%; border: 2px solid var(--yellow); margin-bottom: 10px; }
+header h1 { color: var(--yellow); font-size: 2.2rem; }
+
+/* Tabs Navigation */
+.menu-tabs { display: flex; justify-content: center; gap: 8px; padding: 15px; background: white; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); flex-wrap: wrap; }
+.tab-btn { padding: 8px 18px; border: none; background: #eee; border-radius: 25px; cursor: pointer; font-family: 'Cairo'; font-weight: bold; transition: 0.3s; }
+.tab-btn.active { background: var(--red); color: white; }
+
+/* Menu Grid */
+.menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; margin-top: 25px; }
+.menu-item { background: white; border-radius: 15px; overflow: hidden; text-align: center; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.3s; padding-bottom: 15px; }
+.menu-item:hover { transform: translateY(-5px); }
+.menu-item img { width: 100%; height: 150px; object-fit: cover; }
+.menu-item h3 { font-size: 1rem; margin: 12px 0 5px; color: var(--dark); }
+.price { color: #27ae60; font-weight: bold; font-size: 1.1rem; }
+
+/* Modal */
+.modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); }
+.modal-content { background: white; width: 90%; max-width: 450px; margin: 10% auto; padding: 25px; border-radius: 25px; position: relative; text-align: center; animation: zoomIn 0.3s; }
+@keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.close { position: absolute; right: 20px; top: 10px; font-size: 35px; color: var(--red); cursor: pointer; }
+#modalImg { width: 100%; border-radius: 20px; margin-bottom: 15px; }
+.modal-price { font-size: 1.8rem; color: #27ae60; font-weight: 900; margin: 15px 0; }
+.order-now { display: inline-block; background: var(--red); color: white; padding: 12px 30px; border-radius: 50px; text-decoration: none; font-weight: bold; }
+
+/* Footer */
+.main-footer { background: var(--dark); color: white; padding: 50px 0 20px; margin-top: 60px; border-top: 5px solid var(--red); }
+.footer-content { display: flex; flex-wrap: wrap; justify-content: space-between; text-align: center; gap: 30px; }
+.footer-logo img { width: 70px; border-radius: 50%; }
+.footer-section h4 { color: var(--yellow); margin-bottom: 20px; font-size: 1.3rem; }
+.contact-btn { display: block; padding: 12px 25px; border-radius: 50px; text-decoration: none; color: white; font-weight: bold; margin-bottom: 10px; transition: 0.3s; }
+.phone { background: var(--red); font-size: 1.3rem; }
+.whatsapp { background: #25d366; display: inline-block; margin: 5px; }
+.facebook { background: #1877f2; display: inline-block; margin: 5px; }
+.contact-btn:hover { opacity: 0.8; transform: scale(1.05); }
+.footer-bottom { border-top: 1px solid #333; margin-top: 30px; padding-top: 20px; font-size: 0.8rem; color: #777; text-align: center; }
+
+@media (max-width: 600px) { .footer-content { flex-direction: column; align-items: center; } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <img src="Hoh/Logo.jpg" alt="زاد بريك" class="logo">
+            <h1>زاد بريك</h1>
+            <p>أفضل الاكلات في قوص - طعم يناديك</p>
+        </div>
+    </header>
+
+    <nav class="menu-tabs">
+        <button class="tab-btn active" onclick="filterMenu('all', event)">الكل</button>
+        <button class="tab-btn" onclick="filterMenu('pizza', event)">بيتزا</button>
+        <button class="tab-btn" onclick="filterMenu('chicken', event)">فرايد تشيكن</button>
+        <button class="tab-btn" onclick="filterMenu('pasta', event)">باستا</button>
+        <button class="tab-btn" onclick="filterMenu('fries', event)">فرايز</button>
+        <button class="tab-btn" onclick="filterMenu('cheken', event)">فراخ علي الفحم</button>
+      <button class="tab-btn" onclick="filterMenu('offers', event)">عروض التوفير ✨</button>
+
+    </nav>
+
+    <main class="container">
+        <div class="menu-grid" id="menuGrid">
+            
+            <div class="menu-item pizza" onclick="openModal('تكساس بيتزا 🔥', 'لحم بقر، هالوبينو، موتزريلا، صوص تكساس.<br><table class=\'price-table\'><tr><td class=\'size-label\'>صغير</td><td>109</td></tr><tr><td class=\'size-label\'>وسط</td><td>154</td></tr><tr><td class=\'size-label\'>كبير</td><td>199</td></tr></table>', 'تبدأ من 109', 'Hoh/Tacs.jpg')">
+                <img src="Hoh/Tacs.jpg" alt="بيتزا">
+                <div class="item-info">
+                    <h3>تكساس بيتزا 🔥</h3>
+                    <div class="price">يبدأ من 109 ج.م</div>
+                </div>
+            </div>
+
+            <div class="menu-item pizza" onclick="openModal('بيتزا تشيكن رانش 🍕', 'قطع فراخ مشوية، صوص رانش، موتزريلا.<br><table class=\'price-table\'><tr><td class=\'size-label\'>صغير</td><td>110</td></tr><tr><td class=\'size-label\'>وسط</td><td>160</td></tr><tr><td class=\'size-label\'>كبير</td><td>200</td></tr></table>', 'تبدأ من 110', 'Hoh/Ranch.jpg')">
+                <img src="Hoh/Ranch.jpg" alt="بيتزا">
+                <div class="item-info">
+                    <h3>بيتزا تشيكن رانش 🍕</h3>
+                    <div class="price">يبدأ من 110 ج.م</div>
+                </div>
+            </div>
+          
+          <div class="menu-item pizza" onclick="openModal('بيتزا مارجريتا', 'صلصة طماطم، موتزريلا، ريحان.', '80 | 120 | 145', 'Hoh/Pizza1.jpg')">
+    <img src="Hoh/Pizza1.jpg" alt="بيتزا">
+    <div class="item-info">
+        <h3>بيتزا مارجريتا</h3>
+        <p>S: 80 | M: 120 | L: 145</p>
+        <div class="price">80 ج.م</div>
+    </div>
+</div>
+
+<div class="menu-item pizza" onclick="openModal('بيتزا لحم', 'قطع لحم متبلة، موتزريلا، خضروات.', '100 | 145 | 180', 'Hoh/Pizza2.jpg')">
+    <img src="Hoh/Pizza2.jpg" alt="بيتزا">
+    <div class="item-info">
+        <h3>بيتزا لحم</h3>
+        <p>S: 100 | M: 145 | L: 180</p>
+        <div class="price">100 ج.م</div>
+    </div>
+</div>
+
+<div class="menu-item pizza" onclick="openModal('بيتزا فراخ', 'قطع دجاج متبلة، موتزريلا، خضروات.', '100 | 145 | 180', 'Hoh/Pizza3.jpg')">
+    <img src="Hoh/Pizza3.jpg" alt="بيتزا">
+    <div class="item-info">
+        <h3>بيتزا فراخ</h3>
+        <p>S: 100 | M: 145 | L: 180</p>
+        <div class="price">100 ج.م</div>
+    </div>
+</div>
+
+<div class="menu-item pizza" onclick="openModal('بيتزا فراخ ميكس جبن', 'قطع دجاج مع تشكيلة أجبان فاخرة.', '110 | 165 | 205', 'Hoh/Pizza4.jpg')">
+    <img src="Hoh/Pizza4.jpg" alt="بيتزا">
+    <div class="item-info">
+        <h3>بيتزا فراخ ميكس جبن</h3>
+        <p>S: 110 | M: 165 | L: 205</p>
+        <div class="price">110 ج.م</div>
+    </div>
+</div>
+
+<div class="menu-item pizza" onclick="openModal('بيتزا هوت دوج', 'قطع هوت دوج، موتزريلا، صوص زاد.', '90 | 135 | 165', 'Hoh/Pizza5.jpg')">
+    <img src="Hoh/Pizza5.jpg" alt="بيتزا">
+    <div class="item-info">
+        <h3>بيتزا هوت دوج</h3>
+        <p>S: 90 | M: 135 | L: 165</p>
+        <div class="price">90 ج.م</div>
+    </div>
+</div>
+
+<div class="menu-item pizza" onclick="openModal('بيتزا سجق', 'سجق بلدي، موتزريلا، خضروات طازجة.', '90 | 135 | 165', 'Hoh/Pizza6.jpg')">
+    <img src="Hoh/Pizza6.jpg" alt="بيتزا">
+    <div class="item-info">
+        <h3>بيتزا سجق</h3>
+        <p>S: 90 | M: 135 | L: 165</p>
+        <div class="price">90 ج.م</div>
+    </div>
+</div>
+
+<div class="menu-item pizza" onclick="openModal('بيتزا ميكس تشيز', 'تشكيلة أجبان (شيدر، رومي، موتزريلا، كيري).', '90 | 130 | 160', 'Hoh/Pizza7.jpg')">
+    <img src="Hoh/Pizza7.jpg" alt="بيتزا">
+    <div class="item-info">
+        <h3>بيتزا ميكس تشيز</h3>
+        <p>S: 90 | M: 130 | L: 160</p>
+        <div class="price">90 ج.م</div>
+    </div>
+</div>
+
+<div class="menu-item pizza" onclick="openModal('بيتزا تونة', 'تونة قطع، بصل، فلفل، زيتون.', '150 | 180 (L, M)', 'Hoh/Pizza8.jpg')">
+    <img src="Hoh/Pizza8.jpg" alt="بيتزا">
+    <div class="item-info">
+        <h3>بيتزا تونة</h3>
+        <p>M: 150 | L: 180</p>
+        <div class="price">150 ج.م</div>
+    </div>
+</div>
+
+<div class="menu-item pizza" onclick="openModal('بيتزا باربيكيو', 'دجاج متبل بصوص الباربيكيو المدخن.', '110 | 160 | 200', 'Hoh/Pizza9.jpg')">
+    <img src="Hoh/Pizza9.jpg" alt="بيتزا">
+    <div class="item-info">
+        <h3>بيتزا باربيكيو</h3>
+        <p>S: 110 | M: 160 | L: 200</p>
+        <div class="price">110 ج.م</div>
+    </div>
+</div>
+
+<div class="menu-item pizza" onclick="openModal('بيتزا ميكس لحوم', 'سجق، لحم، هوت دوج، موتزريلا.', '110 | 165 | 205', 'Hoh/Pizza1.jpg')">
+    <img src="Hoh/Pizza1.jpg" alt="بيتزا">
+    <div class="item-info">
+        <h3>بيتزا ميكس لحوم</h3>
+        <p>S: 110 | M: 165 | L: 205</p>
+        <div class="price">110 ج.م</div>
+    </div>
+</div>
+</div>
+
+
+            <div class="menu-item chicken" onclick="openModal('سناك بوكس', '2 قطعة فرايد تشيكن، فرايز، خبز، كول سلو، كولا.', '129.99', 'Hoh/Box.jpg')">
+                <img src="Hoh/Box.jpg" alt="وجبات">
+                <div class="item-info">
+                    <h3>سناك بوكس</h3>
+                    <div class="price">129.99 ج.م</div>
+                </div>
+            </div>
+      
+      <div class="menu-item chicken" onclick="openModal('دينر بوكس', '3 قطعة فرايد + فرايز + 2 خبز + كاتشب أو كول سلو أو ثومية.', '184.99', 'Hoh/Box1.jpg')">
+    <img src="Hoh/Box1.jpg" alt="دينر بوكس">
+    <div class="item-info">
+        <h3>دينر بوكس</h3>
+        <div class="price">184.99 ج.م</div>
+    </div>
+</div>
+
+<div class="menu-item chicken" onclick="openModal('كبل بوكس', '4 قطعة فرايد + فرايز + 3 خبز + كاتشب أو ثومية أو كول سلو.', '239.99', 'Hoh/Box2.jpg')">
+    <img src="Hoh/Box2.jpg" alt="كبل بوكس">
+    <div class="item-info">
+        <h3>كبل بوكس</h3>
+        <div class="price">239.99 ج.م</div>
+    </div>
+</div>
+
+<div class="menu-item chicken" onclick="openModal('فاميلي بوكس', '8 قطعة فرايد + 4 فرايز + 6 خبز + 4 كاتشب أو ثومية أو كول سلو.', '459.99', 'Hoh/Box3.jpg')">
+    <img src="Hoh/Box3.jpg" alt="فاميلي بوكس">
+    <div class="item-info">
+        <h3>فاميلي بوكس</h3>
+        <div class="price">459.99 ج.م</div>
+    </div>
+</div>
+
+<div class="menu-item chicken" onclick="openModal('تشيكن استربس ميديام', '3 قطع استربس + فرايز + 2 خبز + كول سلو.', '129.99', 'Hoh/Box4.jpg')">
+    <img src="Hoh/Box4.jpg" alt="استربس ميديام">
+    <div class="item-info">
+        <h3>تشيكن استربس ميديام</h3>
+        <div class="price">129.99 ج.م</div>
+    </div>
+</div>
+
+<div class="menu-item chicken" onclick="openModal('تشيكن استربس لارج', '5 قطع استربس + فرايز + 2 خبز + كول سلو.', '189.99', 'Hoh/Box5.jpg')">
+    <img src="Hoh/Box5.jpg" alt="استربس لارج">
+    <div class="item-info">
+        <h3>تشيكن استربس لارج</h3>
+        <div class="price">189.99 ج.م</div>
+    </div>
+</div>
+
+<div class="menu-item chicken" onclick="openModal('ريزو', 'أرز + قطع فرايد تشيكن + باربيكيو أو كاتشب أو سويت شيلي حار.', '79.99', 'Hoh/Box6.jpg')">
+    <img src="Hoh/Box6.jpg" alt="ريزو">
+    <div class="item-info">
+        <h3>ريزو</h3>
+        <div class="price">79.99 ج.م</div>
+    </div>
+</div>
+
+<div class="menu-item chicken" onclick="openModal('كيدز بوكس', '2 قطعة استربس + فرايز + كاتشب + خبز + عصير.', '99.99', 'Hoh/Box7.jpg')">
+    <img src="Hoh/Box7.jpg" alt="كيدز بوكس">
+    <div class="item-info">
+        <h3>كيدز بوكس</h3>
+        <div class="price">99.99 ج.م</div>
+    </div>
+</div>
+
+
+       <div class="menu-item pasta" onclick="openModal('تشيكن إسبشيال', 'مكرونة إسباجتي + قطع دجاج + ريد صوص + موتزريلا.', '90 | 120', 'Hoh/Ma1.jpg')">
+    <img src="Hoh/Ma1.jpg" alt="تشيكن إسبشيال">
+    <div class="item-info">
+        <h3>تشيكن إسبشيال 🍝</h3>
+        <p>M: 90 | L: 120</p>
+        <div class="price">90 ج.م</div>
+    </div>
+</div>
+
+<div class="menu-item pasta" onclick="openModal('إسبشيال سجق', 'مكرونة إسباجتي + سجق + ريد صوص + موتزريلا.', '85 | 115', 'Hoh/Ma2.jpg')">
+    <img src="Hoh/Ma2.jpg" alt="إسبشيال سجق">
+    <div class="item-info">
+        <h3>إسبشيال سجق</h3>
+        <p>M: 85 | L: 115</p>
+        <div class="price">85 ج.م</div>
+    </div>
+</div>
+
+<div class="menu-item pasta" onclick="openModal('تشيكن نجرسكو', 'مكرونة فيتوتشيني + قطع دجاج + وايت صوص + موتزريلا.', '105 | 140', 'Hoh/Ma3.jpg')">
+    <img src="Hoh/Ma3.jpg" alt="تشيكن نجرسكو">
+    <div class="item-info">
+        <h3>تشيكن نجرسكو 🤍</h3>
+        <p>M: 105 | L: 140</p>
+        <div class="price">105 ج.م</div>
+    </div>
+</div>
+
+
+     <div class="menu-item fries" onclick="openModal('ميكس فرايز', 'بيف بيكون + استربس + فرايز + هالوبينو + صوص شيدر.', '75', 'Hoh/Fris1.jpg')">
+    <img src="Hoh/Fris1.jpg" alt="ميكس فرايز">
+    <div class="item-info">
+        <h3>ميكس فرايز 🔥</h3>
+        <div class="price">75 ج.م</div>
+    </div>
+</div>
+
+<div class="menu-item fries" onclick="openModal('تكساس فرايز', 'فرايز + هالوبينو + صوص تكساس.', '50', 'Hoh/Fris2.jpg')">
+    <img src="Hoh/Fris2.jpg" alt="تكساس فرايز">
+    <div class="item-info">
+        <h3>تكساس فرايز</h3>
+        <div class="price">50 ج.م</div>
+    </div>
+</div>
+
+<div class="menu-item fries" onclick="openModal('تشيز فرايز', 'فرايز + صوص شيدر.', '45', 'Hoh/Fris3.jpg')">
+    <img src="Hoh/Fris3.jpg" alt="تشيز فرايز">
+    <div class="item-info">
+        <h3>تشيز فرايز 🧀</h3>
+        <div class="price">45 ج.م</div>
+    </div>
+</div>
+
+
+          <div class="menu-item cheken" onclick="openModal('ربع فراخ تكا ع الفحم', 'أرز + طحينة + مخلل + 2 عيش.', '105 | 125', 'Hoh/Cheken1.jpg')">
+    <img src="Hoh/Cheken1.jpg" alt="ربع فراخ تكا">
+    <div class="item-info">
+        <h3>ربع فراخ تكا ع الفحم 🍗</h3>
+        <p>ورك: 105 | صدر: 125</p>
+        <div class="price">105 ج.م</div>
+    </div>
+</div>
+
+<div class="menu-item cheken" onclick="openModal('نص فراخ تكا ع الفحم', 'أرز + طحينة + مخلل + 2 عيش.', '210', 'Hoh/Cheken2.jpg')">
+    <img src="Hoh/Cheken2.jpg" alt="نص فراخ تكا">
+    <div class="item-info">
+        <h3>نص فراخ تكا ع الفحم</h3>
+        <div class="price">210 ج.م</div>
+    </div>
+</div>
+
+<div class="menu-item cheken" onclick="openModal('ربع كفتة ع الفحم', 'أرز + طحينة + مخلل + 2 عيش.', '170', 'Hoh/Cheken3.jpg')">
+    <img src="Hoh/Cheken3.jpg" alt="ربع كفتة">
+    <div class="item-info">
+        <h3>ربع كفتة ع الفحم 🍢</h3>
+        <div class="price">170 ج.م</div>
+    </div>
+</div>
+      
+      
+      <div class="menu-item offers" style="grid-column: 1 / -1;" onclick="openModal('أقوى عروض التوفير', 'شوف كل العروض والكومبو المتاحة حالياً من زاد بريك.', '', 'Hoh/Men.jpg')">
+    <img src="Hoh/Men.jpg" alt="عروض التوفير زاد بريك" style="height: auto; max-height: none;">
+    <div class="item-info">
+        <h3 style="font-size: 1.5rem; color: var(--red);">🔥 منيو عروض التوفير الجديد 🔥</h3>
+        <p>اضغط لتكبير الصورة ومشاهدة التفاصيل</p>
+    </div>
+</div>
+
+
+          
+    </main>
+
+    <div id="itemModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img id="modalImg" src="">
+            <h2 id="modalTitle"></h2>
+            <p id="modalDesc"></p> 
+            <div id="modalPrice" class="modal-price"></div>
+            <a href="tel:01111169916" class="order-now">اطلب الآن</a>
+        </div>
+    </div>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="Hoh/Logo.jpg" alt="زاد بريك">
+                    <h3>زاد بريك</h3>
+                </div>
+                <div class="footer-section">
+                    <h4>للطلب والاستفسار</h4>
+                    <a href="tel:01111169916" class="contact-btn phone">📞 01111169916</a>
+                    <div class="social-links">
+                        <a href="https://wa.me/201111169916" class="contact-btn whatsapp">واتساب</a>
+                        <a href="#" class="contact-btn facebook">فيسبوك</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>موقعنا</h4>
+                    <p>📍 قنا - قوص - شارع طريق النصر</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>جميع الحقوق محفوظة لـ زاد بريك &copy; 2026</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function filterMenu(category, event) {
+            const items = document.querySelectorAll('.menu-item');
+            const btns = document.querySelectorAll('.tab-btn');
+            btns.forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            items.forEach(item => {
+                if (category === 'all' || item.classList.contains(category)) {
+                    item.style.display = "block";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        }
+
+        function openModal(title, desc, price, img) {
+            document.getElementById('modalTitle').innerText = title;
+            // تغيير هنا لاستقبال الـ HTML الخاص بالجدول
+            document.getElementById('modalDesc').innerHTML = desc; 
+            document.getElementById('modalPrice').innerText = price + " ج.م";
+            document.getElementById('modalImg').src = img;
+            document.getElementById('itemModal').style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById('itemModal').style.display = "none";
+        }
+
+        window.onclick = function(e) {
+            if (e.target == document.getElementById('itemModal')) closeModal();
+        }
+    </script>
+</body>
+</html>
